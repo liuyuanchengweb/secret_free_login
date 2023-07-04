@@ -3,6 +3,17 @@
 ## 引言
 
 在自动化运维领域，频繁地进行服务器操作是一项常见的任务。为了简化这一过程并提高工作效率，免密登录成为了一种重要的技术。CentOS系列的免密登录脚本可以帮助自动化运维人员快速实现服务器的免密登录，从而简化操作并提高自动化部署、配置和管理的效率。本文将介绍如何使用这个脚本来实现自动化运维中的CentOS系列免密登录。
+## 快速使用
+
+~~~bash
+wget https://gitee.com/useryc/secret_free_login/raw/main/secret_free_login.sh
+# 或者
+wget wget https://raw.githubusercontent.com/liuyuanchengweb/secret_free_login/main/secret_free_login.sh
+chmod +x secret_free_login.sh
+./secret_free_login.sh [用户名] [主机地址] [密码]
+~~~
+
+
 
 ## 目标
 
@@ -173,6 +184,13 @@ run_secret_free_login
 
 ```
 
+1. `ssh_keygen()` 函数：该函数用于生成密钥对。首先判断密钥文件是否已存在，如果存在则打印已经生成的密钥路径，否则使用 `ssh-keygen` 命令生成密钥对，并提取出生成的密钥文件路径。
+2. `scp_key()` 函数：该函数使用 `expect` 工具执行 `ssh-copy-id` 命令将公钥复制到远程主机，实现免密登录配置。在 `expect` 语句中，根据不同的匹配情况执行相应的操作，如发送密码、确认远程主机的公钥等。根据命令执行结果，使用 `puts` 命令输出相应的字符串，作为后续处理的依据。
+3. `check_ip()` 函数：该函数用于检查输入的 IP 地址是否合法。通过正则表达式判断 IP 地址的格式是否符合要求。
+4. `check_expect_installation()` 函数：该函数用于检查是否已安装 `expect` 工具。使用 `command -v` 命令检查 `expect` 命令是否存在，如果不存在，则执行安装操作。根据不同的系统包管理器，使用相应的命令进行安装。
+5. `run_secret_free_login()` 函数：该函数是脚本的主函数，用于执行免密登录的操作。首先检查输入参数是否符合要求，然后调用 `check_expect_installation()` 函数检查是否安装了 `expect` 工具，接着调用 `check_ip()` 函数检查 IP 地址的合法性，然后调用 `ssh_keygen()` 函数生成密钥对，最后调用 `scp_key()` 函数执行免密登录的配置操作。
+6. 在脚本的最后，调用 `run_secret_free_login()` 函数开始执行免密登录操作。
+
 ## 使用方法
 
 按照以下步骤使用CentOS系列的免密登录脚本：
@@ -187,3 +205,4 @@ run_secret_free_login
 - 在运行脚本之前，请确保已经安装了OpenSSH工具和Expect工具。
 - 请确保输入的IP地址是正确的，并且目标主机可以通过网络访问。
 - 如果脚本执行失败或输出错误信息，请仔细检查输入的参数和前提条件。
+
